@@ -39,7 +39,7 @@ public class PersonAddressModel {
         PersonTableModel model = null;
         int noOfRows = myPeople.size();
         int noOfColumns = 6; //There are 4 pieces of data in the Person class plus room for edit button and a view addresses button
-        String[] headings = {"ID No:", "First Name", "Last Name", "View Addresses", "Edit Person:", "View Addresses:"};
+        String[] headings = {"ID No:", "First Name", "Last Name", "Birthday:", "Edit Person:", "View Addresses:"};
         Object[][] data = new Object[noOfRows][noOfColumns];
         int x = 0;
         for (Person currPerson : myPeople) {
@@ -122,6 +122,7 @@ public class PersonAddressModel {
                 public void actionPerformed(ActionEvent e) {
                     AddressTableWindow window = new AddressTableWindow();
                     window.setPerson(currPerson);
+                    window.setRefreshCallback(aTargetToRefresh);
                     window.setVisible(true);
                 }
             });

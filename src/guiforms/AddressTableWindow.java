@@ -7,6 +7,8 @@ package guiforms;
 
 import datamodel.Person;
 import datamodel.PersonAddressModel;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JTextField;
 import javax.swing.table.TableModel;
 import jtablecellrenderers.AddressJTableCellEditorAndRenderer;
@@ -16,8 +18,9 @@ import jtablecellrenderers.AddressJTableCellEditorAndRenderer;
  * @author Roy
  */
 public class AddressTableWindow extends javax.swing.JFrame implements IRefreshable {
-    
+
     private Person myPerson;
+    private IRefreshable target;
 
     /**
      * Creates new form AddressTableWindow
@@ -28,6 +31,12 @@ public class AddressTableWindow extends javax.swing.JFrame implements IRefreshab
         tblAddresses.setDefaultRenderer(Object.class, editorRenderer);
         tblAddresses.setDefaultEditor(Object.class, editorRenderer);
         tblAddresses.setRowHeight(23);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                doCallback();
+            }
+        });
     }
 
     /**
@@ -144,18 +153,28 @@ public class AddressTableWindow extends javax.swing.JFrame implements IRefreshab
     private javax.swing.JLabel lblTableTitle;
     private javax.swing.JTable tblAddresses;
     // End of variables declaration//GEN-END:variables
-    
+
     @Override
     public void refresh() {
-        if(null != myPerson){
+        if (null != myPerson) {
             TableModel dataModel = PersonAddressModel.getAddressTableModelForPerson(myPerson, this);
             tblAddresses.setModel(dataModel);
             lblName.setText(myPerson.toString());
         }
     }
-    
-    public void setPerson(Person aPerson){
+
+    public void setPerson(Person aPerson) {
         myPerson = aPerson;
         refresh();
+    }
+
+    public void setRefreshCallback(IRefreshable aTargetToRefresh) {
+        target = aTargetToRefresh;
+    }
+
+    private void doCallback() {
+        if (null != target) {
+            target.refresh();
+        }
     }
 }

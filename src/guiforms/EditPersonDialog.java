@@ -6,6 +6,8 @@
 package guiforms;
 
 import datamodel.Person;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 
 /**
@@ -13,7 +15,7 @@ import java.time.LocalDate;
  * @author Roy
  */
 public class EditPersonDialog extends javax.swing.JDialog {
-    
+
     private Person myPerson;
     private IRefreshable target;
 
@@ -23,6 +25,12 @@ public class EditPersonDialog extends javax.swing.JDialog {
     public EditPersonDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                doCallback();
+            }
+        });
     }
 
     /**
@@ -249,17 +257,17 @@ public class EditPersonDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtLName;
     // End of variables declaration//GEN-END:variables
 
-    public void setPerson(Person aPerson){
+    public void setPerson(Person aPerson) {
         myPerson = aPerson;
         refreshDetails();
     }
-    
-    public void setRefreshCallback(IRefreshable aTargetToRefresh){
+
+    public void setRefreshCallback(IRefreshable aTargetToRefresh) {
         target = aTargetToRefresh;
     }
-    
-    public void refreshDetails(){
-        if(null != myPerson){
+
+    public void refreshDetails() {
+        if (null != myPerson) {
             spnId.setValue(myPerson.getId());
             txtFName.setText(myPerson.getfName());
             txtLName.setText(myPerson.getlName());
@@ -274,9 +282,9 @@ public class EditPersonDialog extends javax.swing.JDialog {
         String newFName = txtFName.getText();
         String newLName = txtLName.getText();
         int newDay, newMonth, newYear;
-        newDay = (int)spnDay.getValue();
-        newMonth = (int)spnMonth.getValue();
-        newYear = (int)spnYear.getValue();
+        newDay = (int) spnDay.getValue();
+        newMonth = (int) spnMonth.getValue();
+        newYear = (int) spnYear.getValue();
         LocalDate newBirthday = LocalDate.of(newYear, newMonth, newDay);
         myPerson.setfName(newFName);
         myPerson.setlName(newLName);
@@ -286,7 +294,7 @@ public class EditPersonDialog extends javax.swing.JDialog {
     }
 
     private void doCallback() {
-        if(null != target){
+        if (null != target) {
             target.refresh();
         }
     }

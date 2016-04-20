@@ -6,6 +6,8 @@
 package guiforms;
 
 import datamodel.Address;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 
 /**
@@ -23,6 +25,12 @@ public class EditAddressDialog extends javax.swing.JDialog {
     public EditAddressDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                doCallback();
+            }
+        });
         refreshDetails();
     }
 
